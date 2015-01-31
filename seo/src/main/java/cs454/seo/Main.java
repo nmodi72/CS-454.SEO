@@ -21,7 +21,7 @@ public class Main {
  
 	public static void main(String[] args) throws SQLException, IOException {
 		db.runSql2("TRUNCATE Record;");
-		processPage("http://www.youtube.com");
+		processPage("http://www.facebook.com/");
 	}
  
 	public static void processPage(String URL) throws SQLException, IOException{
@@ -38,7 +38,7 @@ public class Main {
 			stmt.execute();
  
 			//get useful information
-			Document doc = Jsoup.connect("http://www.youtube.com/").get();
+			Document doc = Jsoup.connect("http://www.facebook.com/").get();
  
 //			if(doc.text().contains(".")){
 				System.out.println(URL);
