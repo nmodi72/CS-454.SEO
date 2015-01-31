@@ -1,0 +1,11 @@
+This is a maven project for searching data from web - a web crawler
+
+Steps:
+
+1. import a maven project from zip/ rar file into your eclipse IDE.
+
+2. import dependencies for JSoup and mysql-connector. 
+
+	
+
+3. build and run the maven project.
