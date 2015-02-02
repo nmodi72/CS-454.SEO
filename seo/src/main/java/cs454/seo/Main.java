@@ -47,7 +47,7 @@ public class Main {
 			//get all links and recursively call the processPage method
 			Elements questions = doc.select("a[href]");
 			for(Element link: questions){
-			if(link.attr("href").contains("UCF0pVplsI8R5kcAqgtoRqoA"))
+			if(link.attr("href").contains(""))
 					processPage(link.attr("abs:href"));
 			}
 		}
