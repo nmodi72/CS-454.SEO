@@ -106,7 +106,11 @@ public class HttpDownloadUtility {
 					outputStream.close();
 					inputStream.close();
 					hashmap.put(fileURL, saveFilePath);
-
+					
+					System.out.println(fileURL + saveFilePath +
+							WebCrawler.findLastModify(saveFilePath));
+					Storage.toJSON(fileURL, saveFilePath,
+							WebCrawler.findLastModify(saveFilePath));
 					System.out.println("File downloaded");
 
 				} else {

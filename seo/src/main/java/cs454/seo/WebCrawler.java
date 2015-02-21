@@ -2,6 +2,9 @@ package cs454.seo;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -49,12 +53,18 @@ public class WebCrawler {
 	public static DB db = new DB();
 	static ArrayList<String> storedLinks = new ArrayList<String>();
 	static String masterURL = "http://www-scf.usc.edu/~csci572/2012Spring/homework/1/CS572_Spring2012_HW3.pdf";
-
+	static FileWriter fileJSON;
+	
 	public static void main(String[] args) throws IOException, SAXException,
 			TikaException, SQLException {
+		
+		fileJSON = new FileWriter("metadata.json");
 		WebCrawler p = new WebCrawler();
 		db.runSql2("TRUNCATE Record;");
 		p.BFS(masterURL);
+		WebCrawler.fileJSON.close();
+		
+		//fileJSON.close();
 
 	}
 
@@ -220,5 +230,33 @@ public class WebCrawler {
 		}
 		BFS_Recursive(queue);
 	}
+	public static void findMetadata(String path) throws Exception{
+		
+		File f = new File(path); 
+		InputStream in = new FileInputStream(new File(f.getAbsolutePath()));
+		ContentHandler texthandler = new BodyContentHandler(100000000);
+		Metadata metadata = new Metadata();
+		// TikaMetadata tika = new TikaMetadata();
+		AutoDetectParser parser = new AutoDetectParser();
 
+		// String mimeType = tika.detect(input);
+		// metadata.set(Metadata.CONTENT_TYPE, mimeType);
+		try {
+			parser.parse(in, texthandler, metadata);
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
+		in.close();
+		System.out.println(metadata.getDate(Metadata.DATE));
+	}
+	public static String findLastModify(String path){
+		File file = new File(path);
+		 
+		//System.out.println("Before Format : " + file.lastModified());
+	 
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		
+		System.out.println("After Format : " + sdf.format(file.lastModified()));
+		return sdf.format(file.lastModified());
+	}
 }
