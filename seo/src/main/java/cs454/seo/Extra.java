@@ -16,7 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
  
  
-public class Main {
+public class Extra {
 	public static DB db = new DB();
  
 	public static void main(String[] args) throws SQLException, IOException {
