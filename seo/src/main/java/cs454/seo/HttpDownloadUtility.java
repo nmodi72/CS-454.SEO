@@ -33,8 +33,8 @@ public class HttpDownloadUtility {
 		Iterator i = set.iterator();
 		while (i.hasNext()) {
 			Map.Entry me = (Map.Entry) i.next();
-			System.out.print("KEY" + me.getKey() + ": ");
-			System.out.println("VALUE" + me.getValue());
+			//System.out.print("KEY" + me.getKey() + ": ");
+			//System.out.println("VALUE" + me.getValue());
 		}
 
 		// if key is available then please return..!!!
@@ -47,7 +47,7 @@ public class HttpDownloadUtility {
 				HttpURLConnection httpConn = (HttpURLConnection) url
 						.openConnection();
 				int responseCode = httpConn.getResponseCode();
-				System.out.println("----------------" + responseCode);
+				//System.out.println("----------------" + responseCode);
 
 				// always check HTTP response code first
 				if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -114,9 +114,7 @@ public class HttpDownloadUtility {
 					System.out.println("File downloaded");
 
 				} else {
-					System.out
-							.println("No file to download. Server replied HTTP code: "
-									+ responseCode);
+					//System.out.println("No file to download. Server replied HTTP code: "+ responseCode);
 				}
 				httpConn.disconnect();
 			} catch (MalformedURLException e) {
