@@ -13,6 +13,7 @@ import org.apache.tika.exception.TikaException;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -53,11 +54,11 @@ import org.xml.sax.SAXException;
 public class WebCrawler {
 	public static DB db = new DB();
 	static ArrayList<tempData> storedLinks = new ArrayList<tempData>();
-	static String masterURL = "http://www.google.com";
+	static String masterURL = "https://www.calstatela.edu";
 	static FileWriter fileJSON;
 
 	public static void main(String[] args) throws Exception {
-		storedLinks.add(new tempData(masterURL, 0, false));
+		storedLinks.add(new tempData(masterURL, 0, false, true));
 
 		fileJSON = new FileWriter("metadata.json");
 		WebCrawler p = new WebCrawler();
@@ -72,6 +73,7 @@ public class WebCrawler {
 
 	private String urlPath;
 	private int urlDepth;
+	private boolean urlSameDomain;
 
 	@SuppressWarnings("unused")
 	public void CRAWL_Recursive(int d) throws SAXException, TikaException,
@@ -79,36 +81,59 @@ public class WebCrawler {
 		if (storedLinks.isEmpty()) {
 			return;
 		}
+		boolean check = false;
+		for (int i = 0; i < storedLinks.size(); i++) {
+
+			if (storedLinks.get(i).isCrawled() == true) {
+				check = true;
+			} else {
+				check = false;
+			}
+		}
+		if (check == true) {
+			return;
+		}
 		// String urlPath = null;
 		// int urlDepth = 0;
 		System.out.println("-------");
-		for (tempData tempData : storedLinks) {
-			System.out.println(tempData.getUrl() + " and Depth is "
-					+ tempData.getDepth());
-		}
 		int var = 0;
+		/*for (tempData tempData : storedLinks) {
+
+			System.out.println(var + " At Depth" + tempData.getDepth() + " "
+					+ tempData.getUrl());
+			var++;
+		}*/
+
+		System.out.println();
+	
 		for (int i = 0; i < storedLinks.size(); i++) {
-			if ((storedLinks.get(i).isCrawled() == false) && (var <= d)) {
+			/*
+			System.out.println( storedLinks.get(i).getUrl() + " ON " + storedLinks.get(i).getDepth() + " "  + storedLinks.get(i).isCrawled() );
+			*/
+			if ((storedLinks.get(i).isCrawled() == false)/* && (i <= d) */) {
 				this.urlPath = storedLinks.get(i).getUrl();
 				this.urlDepth = storedLinks.get(i).getDepth();
-				storedLinks.set(i, new tempData(urlPath, urlDepth, true));
+				this.urlSameDomain = storedLinks.get(i).isSameDomain();
+				/*
+				 * if (!(urlPath.equals(masterURL))) { if (urlDepth == 0) {
+				 * this.urlDepth = 1; }
+				 * 
+				 * }
+				 */
+			storedLinks.set(i, new tempData(urlPath, urlDepth, true,
+						urlSameDomain));
 				break;
 			}
 
 		}
-		/*
-		 * while (storedLinks.get(var).isCrawled() == false && var <= depth) {
-		 * path = storedLinks.get(var).getUrl(); currentDepth =
-		 * storedLinks.get(var).getDepth(); storedLinks.set(var, new
-		 * tempData(true)); var++; }
-		 */
+		System.out.println(" Parent" + urlPath + " ------- " + urlDepth);
 		String fileURL = urlPath;
 		String saveDir = "C:/path";
-		if (urlDepth <= d) {
+		/*if (urlDepth <= d) {*/
 			URL url;
 			try {
 				url = new URL(urlPath);
-				URI uri = new URI(urlPath);
+				URI uri = new URI(masterURL);
 				String domain = uri.getHost();
 				System.out.println(domain + "Domain Name");
 
@@ -143,47 +168,95 @@ public class WebCrawler {
 				AutoDetectParser parser = new AutoDetectParser();
 				parser.parse(input, teeHandler, metadata, parsecontext);
 
+				urlDepth = urlDepth + 1;
+
 				for (Link name : linkhandler.getLinks()) {
+					int curDepth = urlDepth;
+
 					String curLink = name.getUri();
-
-					int curDepth = 0;
-					if (!(curLink.startsWith("http://")
-							|| curLink.startsWith("https://") || curLink
-								.startsWith("ftp://"))) {
-
-						if (curLink.startsWith("/")) {
-							curLink = urlPath + curLink;
-						} else {
-							curLink = urlPath + "/" + curLink;
-						}
-
-					}
-					if (curLink.endsWith("/")) {
-						curLink = curLink.substring(0, curLink.length() - 1);
-					}
-
-					if (curLink.contains(domain)) {
-						curDepth = 1;
-					} else {
-						curDepth = urlDepth + 1;
-					}
-
-					if (curDepth <= d) {
-						if (!(storedLinks.contains(curLink))) {
-							storedLinks.add(new tempData(curLink, curDepth,
-									false));
-						}
-
-					}
-
+					
+					forEachCrawledLinks(curLink, domain, d, curDepth,
+							urlSameDomain);
 				}
 			} catch (Exception e) {
 
 			}
 
-		}
+		/*}*/
 		CRAWL_Recursive(d);
 
+	}
+
+	public void forEachCrawledLinks(String curLink, String domain, int d,
+			int curDepth, boolean urlSameDomain) throws Exception {
+		// int curDepth = urlDepth;
+		boolean isCurSameDomain = false;
+
+		if (!(curLink.startsWith("http://") || curLink.startsWith("https://") || curLink
+				.startsWith("ftp://"))) {
+
+			if (curLink.startsWith("/")) {
+				curLink = urlPath + curLink;
+			} else {
+				curLink = urlPath + "/" + curLink;
+			}
+
+		}
+		if (curLink.endsWith("/")) {
+			curLink = curLink.substring(0, curLink.length() - 1);
+		}
+
+		URI newUri = new URI(curLink);
+		String newDomain = newUri.getHost();
+	/*	System.out.println(curLink + " " + newDomain + "newDomain Name");
+*/
+		if (urlSameDomain == true) {
+
+			if (newDomain.equals(domain)) {
+				isCurSameDomain = true;
+				// curDepth = 1;
+
+			} else {
+				isCurSameDomain = false;
+				// curDepth = urlDepth + 1;
+			}
+		} else {
+			isCurSameDomain = false;
+		}
+
+		if (curDepth <= d) {
+			boolean isPresent = true;
+			for (tempData temp : storedLinks) {
+				if (!(curLink.equals(temp.getUrl()))) {
+					isPresent = false;
+				} else {
+					isPresent = true;
+					break;
+				}
+			}
+
+			/*
+			 * boolean isPresent = true; for (tempData temp : storedLinks) { if
+			 * (!(curLink.equals(temp.getUrl()))) { isPresent = false; } else {
+			 * isPresent = true; break; }
+			 */
+			
+			System.out.println(curLink + " ON " + curDepth);
+			
+			if (isPresent == false) {
+
+				if ((isCurSameDomain == true)
+						|| (isCurSameDomain == false && curDepth <= d)) {
+					storedLinks.add(new tempData(curLink, curDepth, false,
+							isCurSameDomain));
+				}
+
+			}
+			/*
+			 * if (!(storedLinks.contains(curLink))) { storedLinks.add(new
+			 * tempData(curLink, curDepth, false)); }
+			 */
+		}
 	}
 
 	public void BFS(String path) throws IOException, SAXException,
