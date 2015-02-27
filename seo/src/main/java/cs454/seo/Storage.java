@@ -17,8 +17,12 @@ public class Storage {
 	public static void toJSON(String url, String loc, String date)
 			throws Exception {
 		// TODO Auto-generated method stub
-
 		
+		//System.out.println(url + "DHHHHHHHHHHHHHHHHHHH");
+		/*url = url.replace("/", "\\");
+		loc = loc.replace("/", "\\");
+		date = date.replace("/", "\\");
+		*/
 		JSONObject obj = new JSONObject();
 		obj.put("url:", url);
 		obj.put("date last pull:", date);
