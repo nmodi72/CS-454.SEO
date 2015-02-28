@@ -7,26 +7,55 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.sax.Link;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class Storage {
 
-	public static void toJSON(String url, String loc, String date)
+	@SuppressWarnings("unchecked")
+	public static void toJSON(String title,String type, String url, String loc, String date, List<Link> list)
 			throws Exception {
-		// TODO Auto-generated method stub
 		
+		ArrayList<String> links1 = new ArrayList<String>();
+		ArrayList<String> links2 = new ArrayList<String>();
+		
+		// TODO Auto-generated method stub
+		for (Link name : list) {
+			String curLink = name.getUri();
+			
+			if (!(curLink.startsWith("http://") || curLink.startsWith("https://") || curLink
+					.startsWith("ftp://"))) {
+
+				if (curLink.startsWith("/")) {
+					curLink = url + curLink;
+				} else {
+					curLink = url + "/" + curLink;
+				}
+
+			}
+			
+			links1.add(curLink);
+		}
 		//System.out.println(url + "DHHHHHHHHHHHHHHHHHHH");
 		/*url = url.replace("/", "\\");
 		loc = loc.replace("/", "\\");
 		date = date.replace("/", "\\");
 		*/
 		JSONObject obj = new JSONObject();
-		obj.put("url:", url);
-		obj.put("date last pull:", date);
-		obj.put("local file:", loc);
+		obj.put("title", title);
+		obj.put("type", type);
+		obj.put("url", url);
+		obj.put("date last pull", date);
+		obj.put("local file", loc);
+		obj.put("links", links1);
+		
+		
+		
 		WebCrawler.fileJSON.write(obj.toJSONString());
 		WebCrawler.fileJSON.flush();
 		
@@ -53,6 +82,11 @@ public class Storage {
 		}
 		writer.close();
 */
+	}
+
+	public static void storelinks(List<Link> links) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

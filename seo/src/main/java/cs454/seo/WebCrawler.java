@@ -54,29 +54,45 @@ import org.xml.sax.SAXException;
 public class WebCrawler {
 	public static DB db = new DB();
 	static ArrayList<tempData> storedLinks = new ArrayList<tempData>();
-	static String masterURL = "https://www.calstatela.edu";
+	static String masterURL = "http://www.calstatela.edu";
 	static String saveDir = "C:/path";
-
+	static int masterD;
 	static FileWriter fileJSON;
 
 	public static void main(String[] args) throws Exception {
-
-	
-		fileJSON = new FileWriter("metadata.json");
 		WebCrawler p = new WebCrawler();
+
+		//p.passArgs(args);
+
+		fileJSON = new FileWriter("metadata.json");
 		storedLinks.add(new tempData(masterURL, 0, false, true));
-		try {
-			HttpDownloadUtility.downloadFile(masterURL, saveDir);
+	/*	try {
+			HttpDownloadUtility.downloadFile("Home",masterURL, saveDir);
 		} catch (Exception ex) {
 			// ex.printStackTrace();
-		}
+		}*/
+		p.CRAWL_Recursive(2);
 
-		
-		p.CRAWL_Recursive(1);
-		
+		//p.CRAWL_Recursive(masterD);
+
 		WebCrawler.fileJSON.close();
-		
+
 		// p.BFS(masterURL);
+
+	}
+
+	public void passArgs(String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			System.out.println(args[i]);
+			if (args[i].equals("-d")) {
+				this.masterD = Integer.parseInt(args[i + 1]);
+				continue;
+			}
+			if (args[i].equals("-u")) {
+				this.masterURL = args[i + 1];
+				continue;
+			}
+		}
 
 	}
 
@@ -129,7 +145,7 @@ public class WebCrawler {
 
 		}
 		System.out.println("Parent " + urlPath + " ------- " + urlDepth);
-		
+
 		URL url;
 		try {
 			url = new URL(urlPath);
@@ -167,9 +183,18 @@ public class WebCrawler {
 			ParseContext parsecontext = new ParseContext();
 			AutoDetectParser parser = new AutoDetectParser();
 			parser.parse(input, teeHandler, metadata, parsecontext);
-
+			String title = metadata.get(Metadata.TITLE);
+			String type = metadata.get(Metadata.CONTENT_TYPE);
 			urlDepth = urlDepth + 1;
+			
 
+			try {
+				HttpDownloadUtility.downloadFile(title,type,urlPath, saveDir, linkhandler.getLinks());
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+			}
+
+				Storage.storelinks(linkhandler.getLinks());
 			for (Link name : linkhandler.getLinks()) {
 				int curDepth = urlDepth;
 
@@ -239,12 +264,7 @@ public class WebCrawler {
 
 				storedLinks.add(new tempData(curLink, curDepth, false,
 						isCurSameDomain));
-				try {
-					HttpDownloadUtility.downloadFile(curLink, saveDir);
-				} catch (Exception ex) {
-					// ex.printStackTrace();
-				}
-
+		
 				return;
 			} else {
 				System.out.println("Error");
@@ -254,21 +274,8 @@ public class WebCrawler {
 
 	}
 
-	public void BFS(String path) throws IOException, SAXException,
-			TikaException, SQLException {
-		Queue queue = new LinkedList();
-		queue.add(path);
-		String fileURL = path;
-		String saveDir = "C:/path";
-		try {
-			HttpDownloadUtility.downloadFile(fileURL, saveDir);
-		} catch (Exception ex) {
-			// ex.printStackTrace();
-		}
-		// BFS_Recursive(queue);
-		// CRAWL_Recursive(2);
-	}
 
+/*
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public void BFS_Recursive(Queue queue) throws SAXException, TikaException,
 			SSLHandshakeException, SQLException {
@@ -415,7 +422,7 @@ public class WebCrawler {
 		}
 		BFS_Recursive(queue);
 	}
-
+*/
 	public static void findMetadata(String path) throws Exception {
 
 		File f = new File(path);

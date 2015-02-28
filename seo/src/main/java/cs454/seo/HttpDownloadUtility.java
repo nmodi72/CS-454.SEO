@@ -10,8 +10,11 @@ import java.net.URL;
 import java.nio.charset.MalformedInputException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.tika.sax.Link;
 
 import com.mysql.jdbc.IterateBlock;
 
@@ -25,7 +28,7 @@ public class HttpDownloadUtility {
 	static HashMap hashmap = new HashMap();
 
 	@SuppressWarnings("unchecked")
-	public static void downloadFile(String fileURL, String saveDir)
+	public static void downloadFile(String title,String type, String fileURL, String saveDir, List<Link> list)
 			throws Exception {
 
 		Set set = hashmap.entrySet();
@@ -109,8 +112,8 @@ public class HttpDownloadUtility {
 					
 					System.out.println(fileURL + saveFilePath +
 							WebCrawler.findLastModify(saveFilePath));
-					Storage.toJSON(fileURL, saveFilePath,
-							WebCrawler.findLastModify(saveFilePath));
+					Storage.toJSON(title, type ,fileURL, saveFilePath,
+							WebCrawler.findLastModify(saveFilePath), list);
 					System.out.println("File downloaded");
 
 				} else {
