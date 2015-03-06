@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.tika.sax.Link;
+import org.jsoup.select.Elements;
 
 import com.mysql.jdbc.IterateBlock;
 
@@ -28,17 +29,8 @@ public class HttpDownloadUtility {
 	static HashMap hashmap = new HashMap();
 
 	@SuppressWarnings("unchecked")
-	public static void downloadFile(String title,String type, String fileURL, String saveDir, List<Link> list)
+	public static void downloadFile(int pass, String title,String type, String fileURL, String saveDir, Elements links)
 			throws Exception {
-
-		Set set = hashmap.entrySet();
-
-		Iterator i = set.iterator();
-		while (i.hasNext()) {
-			Map.Entry me = (Map.Entry) i.next();
-			//System.out.print("KEY" + me.getKey() + ": ");
-			//System.out.println("VALUE" + me.getValue());
-		}
 
 		// if key is available then please return..!!!
 		if (hashmap.get(fileURL) != null) {
@@ -95,7 +87,7 @@ public class HttpDownloadUtility {
 						file = new File(saveFilePath);
 						var++;
 					}
-					System.out.println(saveFilePath + "SAVED");
+					//System.out.println(saveFilePath + "SAVED");
 					// opens an output stream to save into file
 					FileOutputStream outputStream = new FileOutputStream(
 							saveFilePath);
@@ -110,11 +102,14 @@ public class HttpDownloadUtility {
 					inputStream.close();
 					hashmap.put(fileURL, saveFilePath);
 					
-					System.out.println(fileURL + saveFilePath +
-							WebCrawler.findLastModify(saveFilePath));
+					/*System.out.println(fileURL + saveFilePath +
+							WebCrawler.findLastModify(saveFilePath));*/
+					
+					if(pass == 1){
 					Storage.toJSON(title, type ,fileURL, saveFilePath,
-							WebCrawler.findLastModify(saveFilePath), list);
+							WebCrawler.findLastModify(saveFilePath), links);
 					System.out.println("File downloaded");
+					}
 
 				} else {
 					//System.out.println("No file to download. Server replied HTTP code: "+ responseCode);

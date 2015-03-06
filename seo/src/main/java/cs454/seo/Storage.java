@@ -12,20 +12,26 @@ import java.util.Map;
 
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.sax.Link;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 public class Storage {
 
 	@SuppressWarnings("unchecked")
-	public static void toJSON(String title,String type, String url, String loc, String date, List<Link> list)
+	public static void toJSON(String title,String type, String url, String loc, String date, Elements links)
 			throws Exception {
 		
 		ArrayList<String> links1 = new ArrayList<String>();
-		ArrayList<String> links2 = new ArrayList<String>();
 		
-		// TODO Auto-generated method stub
-		for (Link name : list) {
+		
+		
+		/*for (Link name : links) {
 			String curLink = name.getUri();
 			
 			if (!(curLink.startsWith("http://") || curLink.startsWith("https://") || curLink
@@ -40,24 +46,34 @@ public class Storage {
 			}
 			
 			links1.add(curLink);
+		}*/
+		
+		for (Element link : links) {
+			 
+			
+			String Link = link.absUrl("href");
+			links1.add(Link);
+			
+			
 		}
-		//System.out.println(url + "DHHHHHHHHHHHHHHHHHHH");
-		/*url = url.replace("/", "\\");
-		loc = loc.replace("/", "\\");
-		date = date.replace("/", "\\");
-		*/
+		
 		JSONObject obj = new JSONObject();
 		obj.put("title", title);
 		obj.put("type", type);
 		obj.put("url", url);
 		obj.put("date last pull", date);
 		obj.put("local file", loc);
-		obj.put("links", links1);
+		//obj.put("list", links1);
 		
+		String jsonfield = obj.toJSONString();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonParser jp = new JsonParser();
+		JsonElement je = jp.parse(jsonfield);
+		String prettyJsonString = gson.toJson(je);
 		
-		
-		WebCrawler.fileJSON.write(obj.toJSONString());
+		WebCrawler.fileJSON.write(prettyJsonString);
 		WebCrawler.fileJSON.flush();
+		
 		
 		
 		
@@ -84,9 +100,5 @@ public class Storage {
 */
 	}
 
-	public static void storelinks(List<Link> links) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
