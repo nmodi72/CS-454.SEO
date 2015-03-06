@@ -1,18 +1,24 @@
 package cs454.seo;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.MalformedInputException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.tika.sax.Link;
 import org.jsoup.select.Elements;
@@ -63,6 +69,9 @@ public class HttpDownloadUtility {
 					if (contentType.contains("text/html")) {
 						extension = ".html";
 						name = name + extension;
+					}else{
+						extension = fileURL.substring(fileURL.lastIndexOf(".") + 1);
+						
 					}
 					/*
 					 * System.out.println("Content-Type = " + contentType);
@@ -71,8 +80,10 @@ public class HttpDownloadUtility {
 
 					// opens input stream from the HTTP connection
 					InputStream inputStream = httpConn.getInputStream();
-
-					String saveFilePath = saveDir + "/" + name;
+					String uuid = UUID.randomUUID().toString();
+					//System.out.println("uuid = " + uuid);
+					
+					String saveFilePath = saveDir + "/" + uuid;
 
 					File file = new File(saveFilePath);
 					int var = 1;
@@ -120,5 +131,44 @@ public class HttpDownloadUtility {
 			}
 		}
 	}
-
+	
+	
+	@SuppressWarnings("resource")
+	public static void downloadContent(String saveDir, String path){
+		
+		if (hashmap.get(path) != null) {
+			return;
+		} else {
+			System.out.println("CONTENT ");
+			String uuid = UUID.randomUUID().toString();
+			System.out.println("uuid = " + uuid);
+			URL website;
+			try {
+				website = new URL(path);
+				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+				FileOutputStream fos;
+				String extension = path.substring(path.lastIndexOf(".") + 1);
+				fos = new FileOutputStream(saveDir + "/" +uuid +"."+ extension);
+				
+				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		   
+			 
+		    //Put in hashmap with key - path and value - location
+		  //  hashmap.put(fileURL, saveFilePath);
+			
+		}
+	}
 }

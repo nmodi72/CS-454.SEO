@@ -215,7 +215,7 @@ public class WebCrawler {
 					
 					int curDepth = urlDepth;
 					try {
-						HttpDownloadUtility.downloadFile(0,imageurl,contentType,urlPath, saveDir, links);
+						HttpDownloadUtility.downloadContent(saveDir, imageurl);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

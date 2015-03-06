@@ -77,6 +77,7 @@ public class Extracter {
 	}
 
 
+	@SuppressWarnings("rawtypes")
 	public static void readJson(String file) {
 		JSONParser parser = new JSONParser();
 		try {
@@ -98,6 +99,7 @@ public class Extracter {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public static synchronized ArrayList<JSONObject> ReadJSON(File MyFile,
 			String Encoding) throws FileNotFoundException, ParseException {
 		Scanner scn = new Scanner(MyFile, Encoding);

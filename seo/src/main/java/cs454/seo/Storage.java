@@ -63,7 +63,7 @@ public class Storage {
 		obj.put("url", url);
 		obj.put("date last pull", date);
 		obj.put("local file", loc);
-		//obj.put("list", links1);
+		obj.put("list", links1);
 		
 		String jsonfield = obj.toJSONString();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
