@@ -54,13 +54,19 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-		
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>2.4.4</version>
-			</dependency>
-		
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -77,59 +83,139 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>cs454.seo.WebCrawler</mainClass>
-					<arguments>
-						<!-- <argument>foo</argument> -->
-						<argument>.</argument>
-					</arguments>
+					<source>1.5</source>
+					<target>1.5</target>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
 				<configuration>
-					<finalName>crawler</finalName>
-					<filters>
-						<filter>
-							<artifact>*:*</artifact>
-							<excludes>
-								<exclude>META-INF/*.SF</exclude>
-								<exclude>META-INF/*.DSA</exclude>
-								<exclude>META-INF/*.RSA</exclude>
-							</excludes>
-						</filter>
-					</filters>
+					<source>1.5</source>
+					<target>1.5</target>
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<!-- Build an executable JAR -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>cs454.seo.WebCrawler</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
+			
 
 
 
 		</plugins>
 	</build>
+
+	<profiles>
+
+		<!-- Creating Cralwer jar executable -->
+		<profile>
+			<id>crawl</id>
+			<build>
+				<plugins>
+
+					<!-- Make this jar executable -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>cs454.seo.WebCrawler</mainClass>
+									<classpathPrefix>dependency-jars/</classpathPrefix>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+
+
+					<!-- Copy project dependency -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<finalName>crawler</finalName>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Creating Extractor jar executable -->
+
+		<profile>
+			<id>extractor</id>
+			<build>
+				<plugins>
+
+					<!-- Make this jar executable -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>cs454.extractor.Crawler</mainClass>
+									<classpathPrefix>dependency-jars/</classpathPrefix>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+
+
+
+					<!-- Copy project dependency -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<finalName>
+								extractor</finalName>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+		<!-- -->
+	</profiles>
 
 </project>
