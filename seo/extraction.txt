@@ -1,0 +1,24 @@
+File:C:\path\01b87983-2d28-4366-bc7d-c1a2475a6d6c.png
+Title:null
+Type:image/png
+-----------------------------------------------------------------------
+File:C:\path\3ec07240-594e-4eba-b6a7-b16571d8f809
+Title:Google Images
+Type:text/html; charset=ISO-8859-1
+-----------------------------------------------------------------------
+File:C:\path\5daa7583-19ba-4180-8310-6cdba5ac0207
+Title:Google
+Type:text/html; charset=ISO-8859-1
+-----------------------------------------------------------------------
+File:C:\path\88751e69-77c5-4b3b-94f8-d3a51170e9da.png
+Title:null
+Type:image/png
+-----------------------------------------------------------------------
+File:C:\path\aeef1bb0-9732-49c1-9a7c-214eee97e1da.png
+Title:null
+Type:image/png
+-----------------------------------------------------------------------
+File:C:\path\d0be657d-0b4e-483f-8e96-fdba4fef3e7a
+Title:Google Maps
+Type:text/html; charset=ISO-8859-1
+-----------------------------------------------------------------------

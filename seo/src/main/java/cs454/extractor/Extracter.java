@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Extracter {
 
+<<<<<<< HEAD
 	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 	public static void main(String[] args) throws Exception {
 
@@ -57,3 +58,32 @@ public class Extracter {
 	}*/
 
 }
+=======
+	static String startDir = "C://path";
+	/*@SuppressWarnings("unchecked")
+	public static void main(String[] args) throws Exception {
+		JSONParser parser = new JSONParser();
+		 
+        try {
+ 
+            Object obj = parser.parse(new FileReader(
+                    "metadata.json"));
+ 
+            JSONObject jsonObject = (JSONObject) obj;
+ 
+            String name = (String) jsonObject.get("Name");
+            String author = (String) jsonObject.get("Author");
+            JSONArray companyList = (JSONArray) jsonObject.get("Company List");
+ 
+            System.out.println("title" + name);
+            System.out.println("local file" + author);
+         
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+		
+		
+*/		
+	}
+>>>>>>> origin/master
