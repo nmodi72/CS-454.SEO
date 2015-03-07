@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.MalformedInputException;
@@ -32,6 +33,7 @@ import com.mysql.jdbc.IterateBlock;
 public class HttpDownloadUtility {
 	private static final int BUFFER_SIZE = 4096;
 
+	@SuppressWarnings("rawtypes")
 	static HashMap hashmap = new HashMap();
 
 	@SuppressWarnings("unchecked")
@@ -48,58 +50,45 @@ public class HttpDownloadUtility {
 				HttpURLConnection httpConn = (HttpURLConnection) url
 						.openConnection();
 				int responseCode = httpConn.getResponseCode();
-				//System.out.println("----------------" + responseCode);
 
 				// always check HTTP response code first
 				if (responseCode == HttpURLConnection.HTTP_OK) {
-
-					/*
-					 * String disposition = httpConn
-					 * .getHeaderField("Content-Disposition");
-					 */
+					String uuid = UUID.randomUUID().toString();
+					
 					String contentType = httpConn.getContentType();
-					/* int contentLength = httpConn.getContentLength(); */
-					int index = fileURL.lastIndexOf("/");
+					//int index = fileURL.lastIndexOf("/");
 					String extension = null;
-					if (index == fileURL.length()) {
-						fileURL = fileURL.substring(1, index);
-					}
-					index = fileURL.lastIndexOf("/") + 1;
-					String name = fileURL.substring(index, fileURL.length());
-					if (contentType.contains("text/html")) {
+					
+					
+					if(contentType.contains("text/html")){
 						extension = ".html";
-						name = name + extension;
+					}else if(contentType.contains("application/xml")){
+						extension = ".xml";
+					}else if(contentType.contains("application/xhtml+xml")){
+						extension = ".xhtml";
+					}else if(contentType.contains("application/pdf")){
+						extension = ".pdf";
+					}else if(contentType.contains("image/png")){
+						extension = ".png";
+					}else if(contentType.contains("image/gif")){
+						extension = ".gif";
+					}else if(contentType.contains("image/jpeg")){
+						extension = ".jpg";
+					}else if(contentType.contains("application/vnd.openxmlformats-officedocument.presentationml.presentation")){
+						extension = ".pptx";
+					}else if(contentType.contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document")){
+						extension = ".docx";
 					}else{
-						extension = fileURL.substring(fileURL.lastIndexOf(".") + 1);
-						
+						extension = " ";
 					}
-					/*
-					 * System.out.println("Content-Type = " + contentType);
-					 * System.out.println("Content-Length = " + contentLength);
-					 */
-
+					
+					
 					// opens input stream from the HTTP connection
 					InputStream inputStream = httpConn.getInputStream();
-					String uuid = UUID.randomUUID().toString();
-					//System.out.println("uuid = " + uuid);
 					
-					String saveFilePath = saveDir + "/" + uuid;
+					String saveFilePath = saveDir + "/" + uuid +extension;
 
-					File file = new File(saveFilePath);
-					int var = 1;
-					// System.out.println("FILE EXISTS" + file.exists());
-					while (file.exists() == true) {
-
-						int extIndex = saveFilePath.lastIndexOf(".");
-						extension = saveFilePath.substring(extIndex,
-								saveFilePath.length());
-						saveFilePath = saveFilePath.substring(0, extIndex);
-						saveFilePath = saveFilePath + var + extension;
-						file = new File(saveFilePath);
-						var++;
-					}
-					//System.out.println(saveFilePath + "SAVED");
-					// opens an output stream to save into file
+					
 					FileOutputStream outputStream = new FileOutputStream(
 							saveFilePath);
 
@@ -133,24 +122,65 @@ public class HttpDownloadUtility {
 	}
 	
 	
-	@SuppressWarnings("resource")
-	public static void downloadContent(String saveDir, String path){
+	@SuppressWarnings({ "resource", "unchecked" })
+	public static void downloadContent(String saveFilePath, String fileURL){
 		
-		if (hashmap.get(path) != null) {
+		if (hashmap.get(fileURL) != null) {
 			return;
 		} else {
+			Elements links = null;
 			System.out.println("CONTENT ");
+			String title = "null";
 			String uuid = UUID.randomUUID().toString();
-			System.out.println("uuid = " + uuid);
+			//System.out.println("uuid = " + uuid);
 			URL website;
 			try {
-				website = new URL(path);
+				website = new URL(fileURL);
+				String extension = null;
+				URLConnection connection = (URLConnection) website.openConnection();
+				System.out.println(fileURL);
+				System.out.println(connection.getContentType() + "CONTENT");
+				String contentType = connection.getContentType();
+				
+				if(contentType.contains("text/html")){
+					extension = ".html";
+				}else if(contentType.contains("application/xml")){
+					extension = ".xml";
+				}else if(contentType.contains("application/xhtml+xml")){
+					extension = ".xhtml";
+				}else if(contentType.contains("application/pdf")){
+					extension = ".pdf";
+				}else if(contentType.contains("image/png")){
+					extension = ".png";
+				}else if(contentType.contains("image/gif")){
+					extension = ".gif";
+				}else if(contentType.contains("image/jpeg")){
+					extension = ".jpg";
+				}else if(contentType.contains("application/vnd.openxmlformats-officedocument.presentationml.presentation")){
+					extension = ".pptx";
+				}else if(contentType.contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document")){
+					extension = ".docx";
+				}else{
+					extension = " ";
+				}
+				
+				
 				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 				FileOutputStream fos;
-				String extension = path.substring(path.lastIndexOf(".") + 1);
-				fos = new FileOutputStream(saveDir + "/" +uuid +"."+ extension);
+				fos = new FileOutputStream(saveFilePath + "/" +uuid + extension);
 				
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+				
+				
+				
+				try {
+					Storage.toJSON(title, contentType ,fileURL, saveFilePath,
+							WebCrawler.findLastModify(saveFilePath), links);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    hashmap.put(fileURL, saveFilePath);
 			
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -164,11 +194,29 @@ public class HttpDownloadUtility {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		   
-			 
-		    //Put in hashmap with key - path and value - location
-		  //  hashmap.put(fileURL, saveFilePath);
+			
 			
 		}
+		
+	}
+	public static boolean checkFileExists(String saveFilePath, String fileURL ){
+
+		File file = new File(saveFilePath);
+		int var = 1;
+		// System.out.println("FILE EXISTS" + file.exists());
+		while (file.exists() == true) {
+
+			int extIndex = saveFilePath.lastIndexOf(".");
+			String extension = saveFilePath.substring(extIndex,
+					saveFilePath.length());
+			saveFilePath = saveFilePath.substring(0, extIndex);
+			saveFilePath = saveFilePath + var + extension;
+			file = new File(saveFilePath);
+			var++;
+		}
+
+		
+		return false;
+		
 	}
 }

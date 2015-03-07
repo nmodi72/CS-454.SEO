@@ -201,11 +201,26 @@ public class WebCrawler {
 					String curLink = link.absUrl("href");
 					
 					int curDepth = urlDepth;
-
-					forEachCrawledLinks(curLink, domain, d, curDepth, urlSameDomain);
-					
+					try {
+						HttpDownloadUtility.downloadContent(saveDir, imageurl);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
 				}
-				
+				for (Element link : links) {
+					Element image = doc.select("img").first();
+					String imageurl = image.absUrl("src");
+					//System.out.println(imageurl + "IMAGE");
+					
+					String curLink = link.absUrl("href");
+					
+					int curDepth = urlDepth;
+					try {
+						HttpDownloadUtility.downloadContent(saveDir, curLink);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
 				for (Element link : links) {
 					Element image = doc.select("img").first();
 					String imageurl = image.absUrl("src");
@@ -214,12 +229,12 @@ public class WebCrawler {
 					String curLink = link.absUrl("href");
 					
 					int curDepth = urlDepth;
-					try {
-						HttpDownloadUtility.downloadContent(saveDir, imageurl);
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
+
+					forEachCrawledLinks(curLink, domain, d, curDepth, urlSameDomain);
+					
 				}
+				
+				
 			/*	try {
 					HttpDownloadUtility.downloadFile(title,type,urlPath, saveDir, linkhandler.getLinks());
 				} catch (Exception ex) {
@@ -311,7 +326,7 @@ public class WebCrawler {
 	
 		if (isPresent == false) {
 
-			if ((isCurSameDomain == true && curDepth <= 10)
+			if ((isCurSameDomain == true)
 					|| (isCurSameDomain == false && curDepth <= d)) {
 
 				storedLinks.add(new tempData(curLink, curDepth, false,
