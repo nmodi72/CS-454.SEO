@@ -4,8 +4,17 @@ Steps:
 
 1. import a maven project from zip/ rar file into your eclipse IDE.
 
-2. import dependencies for JSoup and mysql-connector. 
+2. Open Command prompt and go to the folder directory.
+
+3. type these commands to run program.
+	mvn clean
+	mvn compile
+	mvn package
+	
+	cd target
+	java -jar crawler.jar -d <DEPTH> -u <URL> //where <DEPTH>-you want to crawl the site upto and <URL> -website you want to crawl 
+
+4. Move on for Extractor
+
 
 	
-
-3. build and run the maven project.
