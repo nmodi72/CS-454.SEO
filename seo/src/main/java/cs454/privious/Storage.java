@@ -1,4 +1,4 @@
-package cs454.extractor;
+package cs454.privious;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import cs454.extractor.*;
+import cs454.privious.*;
 import cs454.seo.WebCrawler;
 
 public class Storage {

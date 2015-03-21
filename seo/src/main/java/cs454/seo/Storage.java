@@ -28,13 +28,12 @@ public class Storage {
 			String loc, String date, Elements links) throws Exception {
 
 		ArrayList<String> links1 = new ArrayList<String>();
-		if(links != null){
-		for (Element link : links) {
+		if (links != null) {
+			for (Element link : links) {
 
-			String Link = link.absUrl("href");
-			links1.add(Link);
-
-		}
+				String Link = link.absUrl("href");
+				links1.add(Link);
+			}
 		}
 		JSONObject obj = new JSONObject();
 		obj.put("title", title);
@@ -42,8 +41,8 @@ public class Storage {
 		obj.put("url", url);
 		obj.put("date last pull", date);
 		obj.put("local file", loc);
-		if(links != null){
-		obj.put("list", links1);
+		if (links != null) {
+			obj.put("list", links1);
 		}
 		String jsonfield = obj.toJSONString();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();

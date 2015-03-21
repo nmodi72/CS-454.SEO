@@ -11,7 +11,6 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import org.apache.commons.io.FileUtils;
 
 import javax.net.ssl.SSLHandshakeException;
 
@@ -195,7 +194,7 @@ public class WebCrawler {
 				
 				
 				try {
-					HttpDownloadUtility.downloadFile(1,title,contentType,urlPath, saveDir, links);
+					HttpDownloadUtility.downloadFile(title,contentType,urlPath, saveDir, links);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -213,10 +212,8 @@ public class WebCrawler {
 						ex.printStackTrace();
 					}
 				}
-<<<<<<< HEAD
-=======
+
 				int count = 0;
->>>>>>> origin/master
 				for (Element link : links) {
 					Element image = doc.select("img").first();
 					String imageurl = image.absUrl("src");
@@ -226,16 +223,13 @@ public class WebCrawler {
 					
 					int curDepth = urlDepth;
 					try {
-<<<<<<< HEAD
 						HttpDownloadUtility.downloadContent(saveDir, curLink);
-=======
 						count++;
 						if(count == 2){
 							break;
 						}
 						HttpDownloadUtility.downloadContent(saveDir, imageurl);
 						
->>>>>>> origin/master
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

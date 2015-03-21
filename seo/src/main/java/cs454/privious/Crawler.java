@@ -1,4 +1,4 @@
-package cs454.extractor;
+package cs454.privious;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
 
@@ -17,7 +18,7 @@ import thredds.inventory.bdb.MetadataManager.KeyValue;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cs454.extractor.*;
+import cs454.privious.*;
 
 public class Crawler {
 
@@ -51,9 +52,10 @@ public class Crawler {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException, SAXException,
 			TikaException {
-
+		
 		String sub = "";
 		final InputStream in = new FileInputStream("metadata.json");
 		try {

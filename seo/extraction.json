@@ -1,22 +1,54 @@
 {
-  "Type": "image/png",
-  "File": "C:\\path\\01b87983-2d28-4366-bc7d-c1a2475a6d6c.png"
+  "robots": "noodp",
+  "title": "Google",
+  "File Name": "C:\\path\\06410daf-46e1-4b8f-91a4-a93d29c8bfb9.html",
+  "description": "Search the world\u0027s information, including webpages, images, videos and more. Google has many special features to help you find exactly what you\u0027re looking for.",
+  "Content-Encoding": "ISO-8859-1",
+  "Content-Type": "text/html; charset\u003dISO-8859-1",
+  "dc:title": "Google"
 }{
-  "Type": "text/html; charset\u003dISO-8859-1",
-  "File": "C:\\path\\3ec07240-594e-4eba-b6a7-b16571d8f809",
-  "Title": "Google Images"
+  "File Name": "C:\\path\\08b067df-2d69-4bde-bd79-59785424de92.html",
+  "Content-Type": "application/octet-stream"
 }{
-  "Type": "text/html; charset\u003dISO-8859-1",
-  "File": "C:\\path\\5daa7583-19ba-4180-8310-6cdba5ac0207",
-  "Title": "Google"
+  "robots": "noodp",
+  "title": "Google",
+  "File Name": "C:\\path\\1597661d-02e3-4413-b906-d9e8982d40f0.html",
+  "description": "Search the world\u0027s information, including webpages, images, videos and more. Google has many special features to help you find exactly what you\u0027re looking for.",
+  "Content-Encoding": "ISO-8859-1",
+  "Content-Type": "text/html; charset\u003dISO-8859-1",
+  "dc:title": "Google"
 }{
-  "Type": "image/png",
-  "File": "C:\\path\\88751e69-77c5-4b3b-94f8-d3a51170e9da.png"
+  "Data BitsPerSample": "8 8 8 8",
+  "Compression Lossless": "true",
+  "File Name": "C:\\path\\74d30ebe-e114-4260-a989-361d98057d6a.png",
+  "tiff:BitsPerSample": "8 8 8 8",
+  "width": "48",
+  "Dimension ImageOrientation": "Normal",
+  "Dimension PixelAspectRatio": "1.0",
+  "PLTE PLTEEntry": "index\u003d0, red\u003d255, green\u003d255, blue\u003d255",
+  "Compression CompressionTypeName": "deflate",
+  "tiff:ImageLength": "48",
+  "Data SampleFormat": "Index",
+  "height": "48",
+  "Transparency Alpha": "nonpremultipled",
+  "Chroma NumChannels": "4",
+  "Compression NumProgressiveScans": "1",
+  "Chroma ColorSpaceType": "RGB",
+  "IHDR": "width\u003d48, height\u003d48, bitDepth\u003d8, colorType\u003dPalette, compressionMethod\u003ddeflate, filterMethod\u003dadaptive, interlaceMethod\u003dnone",
+  "tiff:ImageWidth": "48",
+  "Data PlanarConfiguration": "PixelInterleaved",
+  "tRNS tRNS_Palette tRNS_PaletteEntry": "index\u003d0, alpha\u003d0",
+  "Chroma BlackIsZero": "true",
+  "Content-Type": "image/png",
+  "Chroma Palette PaletteEntry": "index\u003d0, red\u003d255, green\u003d255, blue\u003d255, alpha\u003d0"
 }{
-  "Type": "image/png",
-  "File": "C:\\path\\aeef1bb0-9732-49c1-9a7c-214eee97e1da.png"
+  "File Name": "C:\\path\\e9dd0f75-7b2d-4d13-b461-93f65b1c8fd6.html",
+  "Content-Type": "application/octet-stream"
 }{
-  "Type": "text/html; charset\u003dISO-8859-1",
-  "File": "C:\\path\\d0be657d-0b4e-483f-8e96-fdba4fef3e7a",
-  "Title": "Google Maps"
+  "title": "Google Images",
+  "File Name": "C:\\path\\fedb2cd2-6054-431b-9173-9c4ef3dce1ea.html",
+  "description": "Google Images. The most comprehensive image search on the web.",
+  "Content-Encoding": "ISO-8859-1",
+  "Content-Type": "text/html; charset\u003dISO-8859-1",
+  "dc:title": "Google Images"
 }
